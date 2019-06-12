@@ -189,8 +189,8 @@ for i in 0...number_of_teams do
         # select_stats_list("category","Passes")
         # get_full_table()
 
-        # select_stats_list("category","Key passes")
-        # get_full_table()
+        select_stats_list("category","Key passes")
+        get_full_table()
 
         select_stats_list("category","Assists")
         get_full_table()
