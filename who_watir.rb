@@ -4,19 +4,27 @@ $browser = Watir::Browser.new
 
 $browser.goto('https://www.whoscored.com/Regions/252/Tournaments/2/England-Premier-League')
 
+#Shortcut for appending to the json file in the current directory
+
 def file_out(string)
 open('myfile.json', 'a') { |f|
     f.puts string
   }
 end
 
+#wait until the xpath element is present and then click on it
+
 def wait_click_e(xpath)
     $browser.element(:xpath => xpath).wait_until(&:present?).click
 end
 
+#wait until the xpath element is present before continuing
+
 def wait_for_e(xpath)
     $browser.element(:xpath => xpath).wait_until(&:present?)
 end
+
+#Select the specific stats table from the drop down menu
 
 def select_stats_list(list, value)
     case list
@@ -27,6 +35,8 @@ def select_stats_list(list, value)
     
 
 end
+
+#grab the whole table and write to the json file
 
 def get_full_table()
     stats_table = '//*[@id="statistics-table-detailed"]//*[@id="player-table-statistics-body"]'
@@ -68,6 +78,8 @@ def get_full_table()
     file_out(" }")
 end
 
+#Get a list of links for each team in the premiership, this is based on table position
+
 def get_each_team()
 
     prem_table = '//*[@id="standings-16368-content"]'
@@ -84,7 +96,7 @@ def get_each_team()
     return teams_links
 end
 
-#get_each_team()
+#from a team grab a list of links for each player, this is sorted by rating
 
 def get_each_player()
 
@@ -101,6 +113,8 @@ def get_each_player()
     #puts player_links
     return player_links
 end
+
+
 
 number_of_teams = get_each_team().length
 teams = get_each_team()
@@ -184,99 +198,10 @@ for i in 0...number_of_teams do
         file_out(" }")
 
     end
+
+    file_out(" }")
 end
 $browser.close
 
 
-# =begin 
-# xpaths 
-# tackles dropdown    //*[@id="category"]
-# details tab         //*[@id="team-squad-stats-options"]/li[5]/a
-#                     <a href="#team-squad-stats-detailed">Detailed</a>
-#                     //*[@id="statistics-table-detailed"]//*[@id="player-table-statistics-body"]/tr[1]/td[3]/a
-#                     //*[@id="statistics-table-detailed"]//*[@id="player-table-statistics-body"]/tr[2]/td[3]/a
-# table               //*[@id="statistics-table-detailed"]//*[@id="player-table-statistics-body"]
-
-# //*[@id="statistics-table-detailed"]//*[@id="player-table-statistics-body"]/tr[2]
-# //*[@id="statistics-table-detailed"]//*[@id="player-table-statistics-body"]/tr[1]
-
-# def get_full_table()
-#     data_rows = $browser.tr(:xpath => '//*[@id="statistics-table-detailed"]//*[@id="player-table-statistics-body"]/tr')
-#     puts data_rows
-#     data = data_rows.map { |data_row| 
-#         puts data_row
-#         data_row.td.map(&:text)
-#     }
-#     puts data
-# end
-
-# =end
-
-
-# def get_player_link(xpath)
-#     row_count = $browser.element(:xpath => '//*[@id="player-table-statistics-body"]').trs.count
-#     puts row_count
-#     for i in 1..row_count do
-#         puts
-#         puts i
-#         each_player = '//*[@id="player-table-statistics-body"]/tr[' + i.to_s + ']/td[3]/a'
-#         #puts each_player
-#         player_name = $browser.element(:xpath => each_player)#.inner_html
-#         puts '{ Name: ' + player_name.inner_text + " }"
-        
-#         wait_click_e(each_player)
-        
-#         wait_click_e('//*[@id="player-tournament-stats-options"]/li[5]/a')
-        
-#         select_stats_list("Accumulation", "Per 90 mins")
-        
-#         select_stats_list("category","Tackles")
-#         get_full_table()
-        
-#         select_stats_list("category","Interception")
-#         get_full_table()
-        
-#         select_stats_list("category","Cards")
-#         get_full_table()
-        
-#         select_stats_list("category","Offsides")
-#         get_full_table()       
-        
-#         select_stats_list("category","Clearances")
-#         get_full_table()
-        
-#         select_stats_list("category","Blocks")
-#         get_full_table()
-
-#         select_stats_list("category","Saves")
-#         get_full_table()
-
-#         select_stats_list("category","Shots")
-#         get_full_table()
-
-#         select_stats_list("category","Goals")
-#         get_full_table()
-
-#         select_stats_list("category","Dribbles")
-#         get_full_table()
-
-#         select_stats_list("category","Possession loss")
-#         get_full_table()
-
-#         select_stats_list("category","Aerial")
-#         get_full_table()
-
-#         select_stats_list("category","Passes")
-#         get_full_table()
-
-#         select_stats_list("category","Key passes")
-#         get_full_table()
-
-#         select_stats_list("category","Assists")
-#         get_full_table()
-
-#         $browser.back
-        
-#     end
-# end
 
