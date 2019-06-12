@@ -125,7 +125,14 @@ for i in 0...number_of_teams do
     link = teams.values[i]
     #puts team
     #puts link
-    $browser.goto(link)
+    begin
+        retries ||= 0
+        puts "try ##{ retries}"
+        $browser.goto(link)
+    rescue
+        retry if (retries += 1) > 5
+    end
+    
 
     file_out('{ "' + team + '": ')
 
@@ -138,7 +145,15 @@ for i in 0...number_of_teams do
         player_link = players.values[i]
         #puts player
         #puts link
+        
+        begin
+            retries ||= 0
+            puts "try ##{ retries}"
         $browser.goto(player_link)
+        rescue
+            retry if (retries += 1) > 5
+        end
+
         file_out('{ "' + player + '": ')
         wait_click_e('//*[@id="player-tournament-stats-options"]/li[5]/a')
         
